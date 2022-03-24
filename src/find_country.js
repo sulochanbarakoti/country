@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 const Find_country = () => {
 
     const [country, setCountry] = useState([])
-    const [search, setSearch] = useState('')
+    const [filterCountry, setFilterCountry] = useState(country)
 
     useEffect(()=>{
         axios
@@ -15,18 +15,21 @@ const Find_country = () => {
     },[])
 
     const findCountryHandler = (event) => {
-        setSearch(event.target.value)
+        let value = event.target.value.toLowerCase()
+        let result = []
+        result = country.filter(item=>{
+            return item.name.common.match(value)
+        })
+        setFilterCountry(result)
     }
-
-       console.log(country)
 
     return ( 
         <div>
-            <div>find countries: <input onChange={findCountryHandler}></input> </div>
+            <div>find countries:</div> <input onChange={findCountryHandler}></input>
             <ul>
-                {country.map(item=>{
-                    <li>{item.name.common}</li>
-                })}
+                {filterCountry.map((item,index)=>
+                <li key={index}>{item.name.common}</li>
+                )}
             </ul>
         </div>
      );
